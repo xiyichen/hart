@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="A unified framework for clothed human reconstruction, SMPL-X estimation, and novel view synthesis from sparse-view, uncalibrated human images.">
+  <meta name="keywords" content="H">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Human Aligned Reconstruction Transformer</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Human Aligned Reconstruction Transformer</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://xiyichen.github.io">Xiyi Chen</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://taconite.github.io/">Shaofei Wang</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://markomih.github.io/">Marko Mihajlovic</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://itsc.kr/">Taewon Kang</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=xSywCzAAAAAJ&hl=en">Sergey Prokudin</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.cs.umd.edu/~lin/">Ming Lin</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Maryland, College Park</span>
+            <span class="author-block"><sup>2</sup>State Key Laboratory of General Artificial Intelligence, BIGAI</span>
+            <span class="author-block"><sup>3</sup>ETH Zürich</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="./static/paper.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video (Coming Soon)</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/xiyichen/hart"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Coming Soon)</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./static/videos/teaser.mp4"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        HART is a unified framework for clothed human reconstruction, SMPL-X estimation, and novel view synthesis from sparse-view, uncalibrated human images.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<!-- <section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            We introduce HART, a unified framework for sparse-view human reconstruction. Given a small set of uncalibrated RGB images of a person as input, it outputs a watertight clothed mesh, the aligned SMPL-X body mesh, and a Gaussian-splat representation for photorealistic novel-view rendering. Prior methods for clothed human reconstruction either optimize parametric templates, which overlook loose garments and human-object interactions, or train implicit functions under simplified camera assumptions, limiting applicability in real scenes. In contrast, HART predicts per-pixel 3D point maps, normals, and body correspondences, and employs an occlusion-aware Poisson reconstruction to recover complete geometry, even in self-occluded regions. These predictions also align with a parametric SMPL-X body model, ensuring that reconstructed geometry remains consistent with human structure while capturing loose clothing and interactions. These human-aligned meshes initialize Gaussian splats to further enable sparse-view rendering. While trained on only 2.3K synthetic scans, HART achieves state-of-the-art results: Chamfer Distance improves by 18–23% for clothed-mesh reconstruction, PA-V2V drops by 6–27% for SMPL-X estimation, LPIPS decreases by 15–27% for novel-view synthesis on a wide range of datasets. These results suggest that feed-forward transformers can serve as a scalable model for robust human reconstruction in real-world settings. Code and models will be released.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <!-- <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div> -->
+
+
+        Coming Soon!
+      </div>
+    </div>
+    <!--/ Paper video. -->
+
+</section>
+
+
+<section class="hero pipeline">
+  <div class="container is-max-desktop has-text-centered">
+    <div class="hero-body">
+      <h2 class="title is-3">Pipeline</h2>
+      <img src="./static/images/pipeline.png"
+              class="pipeline"
+              alt="Pipeline of our method."/>
+      <p>
+        <strong>Overview of our Network Architecture.</strong> Given $N$ uncalibrated human images, our HART transformer first maps input images $\{ I_i \}_{i=1}^N$ into per-pixel point maps $\hat{p}_i$, refined normal maps $\hat{\mathbf{n}}_i$, SMPL-X tightness vectors $\hat{\mathbf{v}}_i$ and body part labels $\hat{l}_i$. The oriented point maps $\hat{p}_i, \hat{\mathbf{n}}_i$ for all views are merged and converted to an indicator grid $\chi_{\mathrm{refined}}$ via Differentiable Poisson Surface Reconstruction (DPSR). A 3D-UNet $g_{\theta}$ is used for grid refinement to account for self-occlusions and a clothed mesh reconstruction $\mathbf{M}_{\mathrm{clothed}}$ can be obtained by running marching cubes. The SMPL-X tightness vectors and label maps are aggregated into body markers  $\hat{\mathbf{m}}$ out of which we could optimize a SMPL-X mesh $\mathbf{M}_{\mathrm{SMPL\text{-}X}}$.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered">
+
+    <!-- Animation. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Results</h2>
+
+        <!-- Re-rendering. -->
+        <h3 class="title is-4">Clothed Mesh Reconstruction</h3>
+        <div class="content has-text-justified">
+          <p>
+            We show examples of clothed mesh reconstruction from 4 views on test subjects of the <a href="https://github.com/ytrock/THuman2.0-Dataset">THuman 2.1</a> and <a href="https://sanghunhan92.github.io/conference/2K2K/">2K2K</a> datasets, and compare our method with <a href="https://puzzleavatar.is.tue.mpg.de/">PuzzleAvatar</a>, <a href="https://anttwo.github.io/matcha/">MAtCha</a>, and <a href="https://vgg-t.github.io/">VGGT</a>. For better visualization of the VGGT results, we calculate normal maps from the predicted point maps and apply Screened Poisson surface reconstruction to obtain surface meshes. The input views are shown in the top-right corners.
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <video id="replay-video"
+                 controls
+                 muted
+                 preload
+                 playsinline
+                 autoplay
+                 loop
+                 width="75%">
+            <source src="./static/videos/clothed_mesh_1.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <!--/ Re-rendering. -->
+
+        <h3 class="title is-4">SMPL-X Estimation</h3>
+        <div class="content has-text-justified">
+          <p>
+            We show examples of SMPL-X estimation from 4 views on test subjects of the THuman 2.1 and 2K2K datasets, and compare our method with <a href="https://github.com/zju3dv/EasyMocap">EasyMocap</a>, <a href="https://github.com/ZhengZerong/MultiviewSMPLifyX">Multi-view SMPLify-X</a>, and <a href="https://boqian-li.github.io/ETCH/">ETCH</a>. For ETCH, we adopt it as a postprocessing step on our clothed mesh predictions. The input views are shown in the top-right corners.
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <video id="replay-video"
+                 controls
+                 muted
+                 preload
+                 playsinline
+                 autoplay
+                 loop
+                 width="75%">
+            <source src="./static/videos/smplx.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+
+        <h3 class="title is-4">Novel View Synthesis</h3>
+        <div class="content has-text-justified">
+          <p>
+            We present novel view synthesis results on the DNA-Rendering dataset with real-world human captures under 4-, 6-, and 8-view settings, comparing against <a href="https://anttwo.github.io/matcha/">MAtCha</a>, the strongest competing baseline.
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <video id="replay-video"
+                 controls
+                 muted
+                 preload
+                 playsinline
+                 autoplay
+                 loop
+                 width="75%">
+            <source src="./static/videos/nvs.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+    <!--/ Animation. -->
+
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{chen2025hart,
+         title={Human Aligned Reconstruction Transformer},
+         author={Chen, Xiyi and Wang, Shaofei and Mihajlovic, Marko and Kang, Taewon and Lin, Ming},
+         journal={arXiv preprint arXiv:XXXX.XXXXX},
+         year={2025}
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <!-- <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a> -->
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This webpage template is adapted from <a rel="license" href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>, under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0 License</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
